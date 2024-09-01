@@ -1068,6 +1068,12 @@ void Node3DEditorViewport::_select_region() {
 		found_nodes.insert(sp);
 
 		Node *node = Object::cast_to<Node>(sp);
+
+		// Prevent selection of nodes above the edited scene, e.g., an autoload.
+		if (node != edited_scene && !edited_scene->is_ancestor_of(node)) {
+			continue;
+		}
+
 		if (node != edited_scene) {
 			node = edited_scene->get_deepest_editable_node(node);
 		}
